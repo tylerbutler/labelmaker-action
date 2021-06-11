@@ -37,9 +37,9 @@ async function run(): Promise<void> {
       // context.eventName === 'pull_request' ||
       context.eventName === 'pull_request_target'
     ) {
+      core.debug(`handling pull_request event`)
       const payload = github.context.payload as PullRequestEvent
       // core.debug(JSON.stringify(payload))
-      core.debug(`handling pull_request event`)
 
       if (payload.action === 'opened' || payload.action === 'synchronize') {
         const prNumber = payload.pull_request.number
