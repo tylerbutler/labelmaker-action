@@ -3,13 +3,7 @@ import * as github from '@actions/github'
 import {PullRequestEvent} from '@octokit/webhooks-types'
 import * as yaml from 'js-yaml'
 import {Config, Kit} from './types'
-import {
-  addLabels,
-  fetchContent,
-  getPrNumber,
-  getTeamMembers,
-  removeLabels
-} from './utils'
+import {addLabels, fetchContent, getTeamMembers, removeLabels} from './utils'
 
 async function loadConfig(client: Kit, path: string): Promise<Config> {
   const configurationContent: string = await fetchContent(client, path)
@@ -42,14 +36,25 @@ async function run(): Promise<void> {
       if (payload.action === 'opened' || payload.action === 'synchronize') {
         const prNumber = payload.pull_request.number
         const members = await getTeamMembers(api, config.teams.internal)
-
+        core.debug(`members: '${JSON.stringify(members)}`)
+        core.debug(`actor: ${actor}`)
         const isExternal = members.includes(actor)
 
         if (config.labels.externalPRs && isExternal) {
+          core.debug(
+            `adding '${JSON.stringify(
+              config.labels.externalPRs
+            )} to PR ${prNumber}`
+          )
           await addLabels(api, prNumber, config.labels.externalPRs)
         }
 
         if (config.sync && !isExternal) {
+          core.debug(
+            `removing '${JSON.stringify(
+              config.labels.externalPRs
+            )} from PR ${prNumber}`
+          )
           await removeLabels(api, prNumber, config.labels.externalPRs)
         }
       }

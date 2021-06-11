@@ -68,11 +68,15 @@ function run() {
                 if (payload.action === 'opened' || payload.action === 'synchronize') {
                     const prNumber = payload.pull_request.number;
                     const members = yield utils_1.getTeamMembers(api, config.teams.internal);
+                    core.debug(`members: '${JSON.stringify(members)}`);
+                    core.debug(`actor: ${actor}`);
                     const isExternal = members.includes(actor);
                     if (config.labels.externalPRs && isExternal) {
+                        core.debug(`adding '${JSON.stringify(config.labels.externalPRs)} to PR ${prNumber}`);
                         yield utils_1.addLabels(api, prNumber, config.labels.externalPRs);
                     }
                     if (config.sync && !isExternal) {
+                        core.debug(`removing '${JSON.stringify(config.labels.externalPRs)} from PR ${prNumber}`);
                         yield utils_1.removeLabels(api, prNumber, config.labels.externalPRs);
                     }
                 }
@@ -180,7 +184,7 @@ function addLabels(client, prNumber, labels) {
 exports.addLabels = addLabels;
 function removeLabels(client, prNumber, labels) {
     return __awaiter(this, void 0, void 0, function* () {
-        core.debug(`adding '${JSON.stringify(labels)} to PR ${prNumber}`);
+        core.debug(`removing '${JSON.stringify(labels)} from PR ${prNumber}`);
         yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () {
             return client.rest.issues.removeLabel({
                 owner: github.context.repo.owner,

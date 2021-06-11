@@ -70,7 +70,7 @@ export async function removeLabels(
   prNumber: number,
   labels: string[]
 ): Promise<void> {
-  core.debug(`adding '${JSON.stringify(labels)} to PR ${prNumber}`)
+  core.debug(`removing '${JSON.stringify(labels)} from PR ${prNumber}`)
 
   await Promise.all(
     labels.map(async label =>
