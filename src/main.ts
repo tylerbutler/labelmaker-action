@@ -28,9 +28,6 @@ async function run(): Promise<void> {
     const context = github.context
     core.debug(JSON.stringify(context))
 
-    const actor = github.context.actor
-    core.debug(JSON.stringify(actor))
-
     core.debug(JSON.stringify(context.eventName))
 
     if (
@@ -44,6 +41,10 @@ async function run(): Promise<void> {
       if (payload.action === 'opened' || payload.action === 'synchronize') {
         const prNumber = payload.pull_request.number
         core.debug(`PR number: ${prNumber}`)
+
+        const actor = payload.pull_request.user.login
+        core.debug(JSON.stringify(actor))
+
         const members = await getTeamMembers(api, config.teams.internal)
         core.debug(`members: '${JSON.stringify(members)}`)
         core.debug(`actor: ${actor}`)
