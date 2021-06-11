@@ -1,2 +1,7 @@
+teams:
+  internal: ['@microsoft/rague', '@microsoft/PragueAdmin']
+
 labels:
-  externalPR: 'community-contribution'
+  externalPR: ['community-contribution']
+
+sync: true

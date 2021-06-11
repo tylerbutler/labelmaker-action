@@ -1,55 +1,50 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import {PullRequestEvent} from '@octokit/webhooks-types'
-import * as fs from 'fs-extra'
+import { PullRequestEvent } from '@octokit/webhooks-types'
 import * as yaml from 'js-yaml'
-import {Config} from './types'
+import { Config, Kit } from './types'
+import { addLabels, fetchContent, getPrNumber, getTeamMembers, removeLabels } from './utils'
 
-async function loadConfig(path: string): Promise<Config> {
-  return yaml.load(fs.readFileSync(path, {encoding: 'utf8'})) as Config
+async function loadConfig(client: Kit, path: string): Promise<Config> {
+  const configurationContent: string = await fetchContent(client, path)
+  const config = yaml.load(configurationContent) as Config
+  core.debug(JSON.stringify(config))
+  return config
 }
 
 async function run(): Promise<void> {
   try {
-    const config = await loadConfig(core.getInput('config'))
     const token = core.getInput('token')
-    const octokit = github.getOctokit(token)
+    const api: Kit = github.getOctokit(token)
+    const config = await loadConfig(api, core.getInput('config'))
+
+    // const baseOctokit = GitHub.plugin(restEndpointMethods)
+    // or override some of the default values as well
+    // const octokit = GitHub.plugin(enterpriseServer220Admin).defaults({userAgent: "MyNewUserAgent"})
+
+    // const octokit = new baseOctokit(getOctokitOptions(token))
+
+    // const API = Octokit.plugin(restEndpointMethods)
     const context = github.context
     const actor = github.context.actor
 
     if (
-      context.eventName === 'pull_request' ||
+      // context.eventName === 'pull_request' ||
       context.eventName === 'pull_request_target'
     ) {
       const payload = github.context.payload as PullRequestEvent
       if (payload.action === 'opened' || payload.action === 'synchronize') {
-        const collaborators = await octokit.request(
-          `GET /repos/{owner}/{repo}/collaborators`,
-          {
-            owner: context.repo.owner,
-            repo: context.repo.repo
-          }
-        )
-        const isExternal = !collaborators.data.some(
-          user => user.login === actor
-        )
+        const prNumber = payload.pull_request.number
+        const members = await getTeamMembers(api, config.teams.internal)
+
+        const isExternal = members.includes(actor)
 
         if (config.labels.externalPRs && isExternal) {
-          const response = await octokit.request(
-            'POST /repos/{owner}/{repo}/issues/{issue_number}/labels',
-            {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: payload.pull_request.number,
-              labels: config.labels.externalPRs.map(label => {
-                return {name: label}
-              })
-            }
-          )
-          if (response.status !== 200) {
-            core.setFailed(JSON.stringify(response.data))
-          }
-          // SUCCESS!
+          await addLabels(api, prNumber, config.labels.externalPRs)
+        }
+
+        if (config.sync && !isExternal) {
+          await removeLabels(api, prNumber, config.labels.externalPRs)
         }
       }
     }

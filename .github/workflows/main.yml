@@ -1,0 +1,15 @@
+on: [pull_request]
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    name: Apply labels
+    steps:
+      # To use this repository's private action,
+      # you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Apply labels
+        uses: ./ # Uses an action in the root directory
+        with:
+          token: "${{ github.token }}"

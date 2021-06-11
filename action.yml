@@ -2,6 +2,9 @@ name: 'labelmaker'
 description: 'Apply labels to issues and PRs automatically.'
 author: 'tylerbutler'
 inputs:
+  token:
+    required: true
+    description: 'a token'
   config:
     required: true
     description: 'path to config file'
