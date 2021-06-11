@@ -27,6 +27,8 @@ async function run(): Promise<void> {
     // const API = Octokit.plugin(restEndpointMethods)
     const context = github.context
     const actor = github.context.actor
+    core.debug(JSON.stringify(actor))
+    core.debug(JSON.stringify(context))
 
     if (
       // context.eventName === 'pull_request' ||
