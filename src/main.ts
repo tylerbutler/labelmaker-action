@@ -65,7 +65,11 @@ async function run(): Promise<void> {
               config.labels.externalPRs
             )} from PR ${prNumber}`
           )
-          await removeLabels(api, prNumber, config.labels.externalPRs)
+          try {
+            await removeLabels(api, prNumber, config.labels.externalPRs)
+          } catch (err) {
+            core.debug(`removing labels failed ${err.message}`)
+          }
         }
       }
     }

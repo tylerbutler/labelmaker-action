@@ -83,7 +83,12 @@ function run() {
                     }
                     if (config.sync && !isExternal) {
                         core.debug(`removing '${JSON.stringify(config.labels.externalPRs)} from PR ${prNumber}`);
-                        yield utils_1.removeLabels(api, prNumber, config.labels.externalPRs);
+                        try {
+                            yield utils_1.removeLabels(api, prNumber, config.labels.externalPRs);
+                        }
+                        catch (err) {
+                            core.debug(`removing labels failed ${err.message}`);
+                        }
                     }
                 }
             }
