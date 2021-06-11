@@ -1,11 +1,12 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'labelmaker'
+description: 'Apply labels to issues and PRs automatically.'
+author: 'tylerbutler'
 inputs:
-  milliseconds: # change this
+  config: # change this
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'path to config file'
+    default: '.github/labelmaker.yml'
+
 runs:
   using: 'node12'
   main: 'dist/index.js'
