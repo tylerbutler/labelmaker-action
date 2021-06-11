@@ -100,7 +100,7 @@ export async function getTeamMembers(
     )
     for (const user of members.data) {
       if (user) {
-        core.debug(`member: ${user}`)
+        core.debug(`member: ${user.login}`)
         allMembers.add(user.login)
       }
     }

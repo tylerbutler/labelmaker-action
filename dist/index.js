@@ -76,7 +76,7 @@ function run() {
                     const members = yield utils_1.getTeamMembers(api, config.teams.internal);
                     core.debug(`members: '${JSON.stringify(members)}`);
                     core.debug(`actor: ${actor}`);
-                    const isExternal = members.includes(actor);
+                    const isExternal = !members.includes(actor);
                     if (config.labels.externalPRs && isExternal) {
                         core.debug(`adding '${JSON.stringify(config.labels.externalPRs)} to PR ${prNumber}`);
                         yield utils_1.addLabels(api, prNumber, config.labels.externalPRs);
@@ -213,7 +213,7 @@ function getTeamMembers(client, teams) {
             });
             for (const user of members.data) {
                 if (user) {
-                    core.debug(`member: ${user}`);
+                    core.debug(`member: ${user.login}`);
                     allMembers.add(user.login);
                 }
             }

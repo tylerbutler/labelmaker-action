@@ -47,7 +47,7 @@ async function run(): Promise<void> {
         const members = await getTeamMembers(api, config.teams.internal)
         core.debug(`members: '${JSON.stringify(members)}`)
         core.debug(`actor: ${actor}`)
-        const isExternal = members.includes(actor)
+        const isExternal = !members.includes(actor)
 
         if (config.labels.externalPRs && isExternal) {
           core.debug(
