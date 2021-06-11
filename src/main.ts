@@ -32,7 +32,7 @@ async function run(): Promise<void> {
         )
 
         if (config.labels.externalPRs && isExternal) {
-          await octokit.request(
+          const response = await octokit.request(
             'POST /repos/{owner}/{repo}/issues/{issue_number}/labels',
             {
               owner: context.repo.owner,
@@ -43,21 +43,13 @@ async function run(): Promise<void> {
               })
             }
           )
+          if (response.status !== 200) {
+            core.setFailed(JSON.stringify(response.data))
+          }
+          // SUCCESS!
         }
       }
     }
-
-    // const payload = JSON.stringify(github.context.payload, undefined, 2)
-    // core.debug(`The event payload: ${payload}`)
-
-    // const ms: string = core.getInput('milliseconds')
-    // core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-
-    // core.debug(new Date().toTimeString())
-    // await wait(parseInt(ms, 10))
-    // core.debug(new Date().toTimeString())
-
-    // core.setOutput('time', new Date().toTimeString())
   } catch (error) {
     core.setFailed(error.message)
   }

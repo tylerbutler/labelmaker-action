@@ -2,7 +2,7 @@ name: 'labelmaker'
 description: 'Apply labels to issues and PRs automatically.'
 author: 'tylerbutler'
 inputs:
-  config: # change this
+  config:
     required: true
     description: 'path to config file'
     default: '.github/labelmaker.yml'
