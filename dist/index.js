@@ -63,10 +63,12 @@ function run() {
             core.debug(JSON.stringify(context));
             const actor = github.context.actor;
             core.debug(JSON.stringify(actor));
+            core.debug(JSON.stringify(context.eventName));
             if (
             // context.eventName === 'pull_request' ||
             context.eventName === 'pull_request_target') {
                 const payload = github.context.payload;
+                core.debug(JSON.stringify(payload));
                 if (payload.action === 'opened' || payload.action === 'synchronize') {
                     const prNumber = payload.pull_request.number;
                     const members = yield utils_1.getTeamMembers(api, config.teams.internal);
