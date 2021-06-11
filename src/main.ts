@@ -17,7 +17,10 @@ async function run(): Promise<void> {
     const context = github.context
     const actor = github.context.actor
 
-    if (context.eventName === 'pull_request') {
+    if (
+      context.eventName === 'pull_request' ||
+      context.eventName === 'pull_request_target'
+    ) {
       const payload = github.context.payload as PullRequestEvent
       if (payload.action === 'opened' || payload.action === 'synchronize') {
         const collaborators = await octokit.request(

@@ -53,7 +53,8 @@ function run() {
             const octokit = github.getOctokit(token);
             const context = github.context;
             const actor = github.context.actor;
-            if (context.eventName === 'pull_request') {
+            if (context.eventName === 'pull_request' ||
+                context.eventName === 'pull_request_target') {
                 const payload = github.context.payload;
                 if (payload.action === 'opened' || payload.action === 'synchronize') {
                     const collaborators = yield octokit.request(`GET /repos/{owner}/{repo}/collaborators`, {
