@@ -1,8 +1,8 @@
-import type { Octokit } from '@octokit/core'
+import type {Octokit} from '@octokit/core'
 // import {restEndpointMethods} from '@octokit/plugin-rest-endpoint-methods'
 // import {GitHub, getOctokitOptions} from '@actions/github'
-import { Api } from '@octokit/plugin-rest-endpoint-methods/dist-types/types'
-import { PaginateInterface } from '@octokit/plugin-paginate-rest'
+import {Api} from '@octokit/plugin-rest-endpoint-methods/dist-types/types'
+import {PaginateInterface} from '@octokit/plugin-paginate-rest'
 
 export type Kit = Octokit &
   Api & {

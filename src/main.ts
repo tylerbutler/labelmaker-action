@@ -1,9 +1,15 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { PullRequestEvent } from '@octokit/webhooks-types'
+import {PullRequestEvent} from '@octokit/webhooks-types'
 import * as yaml from 'js-yaml'
-import { Config, Kit } from './types'
-import { addLabels, fetchContent, getPrNumber, getTeamMembers, removeLabels } from './utils'
+import {Config, Kit} from './types'
+import {
+  addLabels,
+  fetchContent,
+  getPrNumber,
+  getTeamMembers,
+  removeLabels
+} from './utils'
 
 async function loadConfig(client: Kit, path: string): Promise<Config> {
   const configurationContent: string = await fetchContent(client, path)

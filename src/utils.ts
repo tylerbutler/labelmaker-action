@@ -1,6 +1,6 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
-import { Kit } from './types'
+import {Kit} from './types'
 
 // import {Minimatch, IMinimatch} from 'minimatch'
 export function getPrNumber(): number | undefined {
@@ -98,8 +98,10 @@ export async function getTeamMembers(
       }
     )
     for (const user of members.data) {
-      core.debug(`member: ${user}`)
-      allMembers.add(user.login)
+      if (user) {
+        core.debug(`member: ${user}`)
+        allMembers.add(user.login)
+      }
     }
   }
   return Array.from(allMembers)
