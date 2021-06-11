@@ -8,7 +8,7 @@ import {addLabels, fetchContent, getTeamMembers, removeLabels} from './utils'
 async function loadConfig(client: Kit, path: string): Promise<Config> {
   const configurationContent: string = await fetchContent(client, path)
   const config = yaml.load(configurationContent) as Config
-  core.debug(JSON.stringify(config))
+  core.debug(`config: ${JSON.stringify(config)}`)
   return config
 }
 
@@ -26,9 +26,10 @@ async function run(): Promise<void> {
 
     // const API = Octokit.plugin(restEndpointMethods)
     const context = github.context
+    core.debug(JSON.stringify(context))
+
     const actor = github.context.actor
     core.debug(JSON.stringify(actor))
-    core.debug(JSON.stringify(context))
 
     if (
       // context.eventName === 'pull_request' ||

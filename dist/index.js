@@ -44,7 +44,7 @@ function loadConfig(client, path) {
     return __awaiter(this, void 0, void 0, function* () {
         const configurationContent = yield utils_1.fetchContent(client, path);
         const config = yaml.load(configurationContent);
-        core.debug(JSON.stringify(config));
+        core.debug(`config: ${JSON.stringify(config)}`);
         return config;
     });
 }
@@ -60,9 +60,9 @@ function run() {
             // const octokit = new baseOctokit(getOctokitOptions(token))
             // const API = Octokit.plugin(restEndpointMethods)
             const context = github.context;
+            core.debug(JSON.stringify(context));
             const actor = github.context.actor;
             core.debug(JSON.stringify(actor));
-            core.debug(JSON.stringify(context));
             if (
             // context.eventName === 'pull_request' ||
             context.eventName === 'pull_request_target') {
