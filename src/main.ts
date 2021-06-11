@@ -38,9 +38,12 @@ async function run(): Promise<void> {
       context.eventName === 'pull_request_target'
     ) {
       const payload = github.context.payload as PullRequestEvent
-      core.debug(JSON.stringify(payload))
+      // core.debug(JSON.stringify(payload))
+      core.debug(`handling pull_request event`)
+
       if (payload.action === 'opened' || payload.action === 'synchronize') {
         const prNumber = payload.pull_request.number
+        core.debug(`PR number: ${prNumber}`)
         const members = await getTeamMembers(api, config.teams.internal)
         core.debug(`members: '${JSON.stringify(members)}`)
         core.debug(`actor: ${actor}`)

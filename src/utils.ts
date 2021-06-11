@@ -90,6 +90,7 @@ export async function getTeamMembers(
 ): Promise<string[]> {
   const allMembers = new Set<string>()
   for (const team of teams) {
+    core.debug(`team: ${team}`)
     const members = await client.request(
       'GET /orgs/{org}/teams/{team_slug}/members',
       {

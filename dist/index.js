@@ -68,9 +68,11 @@ function run() {
             // context.eventName === 'pull_request' ||
             context.eventName === 'pull_request_target') {
                 const payload = github.context.payload;
-                core.debug(JSON.stringify(payload));
+                // core.debug(JSON.stringify(payload))
+                core.debug(`handling pull_request event`);
                 if (payload.action === 'opened' || payload.action === 'synchronize') {
                     const prNumber = payload.pull_request.number;
+                    core.debug(`PR number: ${prNumber}`);
                     const members = yield utils_1.getTeamMembers(api, config.teams.internal);
                     core.debug(`members: '${JSON.stringify(members)}`);
                     core.debug(`actor: ${actor}`);
@@ -204,6 +206,7 @@ function getTeamMembers(client, teams) {
     return __awaiter(this, void 0, void 0, function* () {
         const allMembers = new Set();
         for (const team of teams) {
+            core.debug(`team: ${team}`);
             const members = yield client.request('GET /orgs/{org}/teams/{team_slug}/members', {
                 org: github.context.repo.owner,
                 team_slug: team
