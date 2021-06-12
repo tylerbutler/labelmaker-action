@@ -38,7 +38,11 @@ async function run(): Promise<void> {
       const payload = github.context.payload as PullRequestEvent
       // core.debug(JSON.stringify(payload))
 
-      if (payload.action === 'opened' || payload.action === 'synchronize') {
+      if (
+        payload.action === 'opened' ||
+        payload.action === 'synchronize' ||
+        payload.action === 'reopened'
+      ) {
         const prNumber = payload.pull_request.number
         core.debug(`PR number: ${prNumber}`)
 
