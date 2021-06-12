@@ -26,7 +26,7 @@ async function run(): Promise<void> {
 
     // const API = Octokit.plugin(restEndpointMethods)
     const context = github.context
-    core.debug(JSON.stringify(context))
+    // core.debug(JSON.stringify(context))
 
     core.debug(JSON.stringify(context.eventName))
 
@@ -46,7 +46,7 @@ async function run(): Promise<void> {
         core.debug(JSON.stringify(actor))
 
         const members = await getTeamMembers(api, config.teams.internal)
-        core.debug(`members: '${JSON.stringify(members)}`)
+        core.debug(`members: '${JSON.stringify(members)}'`)
         core.debug(`actor: ${actor}`)
         const isExternal = !members.includes(actor)
 
@@ -54,7 +54,7 @@ async function run(): Promise<void> {
           core.debug(
             `adding '${JSON.stringify(
               config.labels.externalPRs
-            )} to PR ${prNumber}`
+            )}' to PR ${prNumber}`
           )
           await addLabels(api, prNumber, config.labels.externalPRs)
         }
@@ -63,7 +63,7 @@ async function run(): Promise<void> {
           core.debug(
             `removing '${JSON.stringify(
               config.labels.externalPRs
-            )} from PR ${prNumber}`
+            )}' from PR ${prNumber}`
           )
           try {
             await removeLabels(api, prNumber, config.labels.externalPRs)

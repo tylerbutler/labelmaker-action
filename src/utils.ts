@@ -70,7 +70,7 @@ export async function removeLabels(
   prNumber: number,
   labels: string[]
 ): Promise<void> {
-  core.debug(`removing '${JSON.stringify(labels)} from PR ${prNumber}`)
+  core.debug(`removing '${JSON.stringify(labels)}' from PR ${prNumber}`)
 
   await Promise.all(
     labels.map(async label =>
@@ -95,7 +95,8 @@ export async function getTeamMembers(
       'GET /orgs/{org}/teams/{team_slug}/members',
       {
         org: github.context.repo.owner,
-        team_slug: team
+        team_slug: team,
+        per_page: 100
       }
     )
     for (const user of members.data) {

@@ -60,7 +60,7 @@ function run() {
             // const octokit = new baseOctokit(getOctokitOptions(token))
             // const API = Octokit.plugin(restEndpointMethods)
             const context = github.context;
-            core.debug(JSON.stringify(context));
+            // core.debug(JSON.stringify(context))
             core.debug(JSON.stringify(context.eventName));
             if (
             // context.eventName === 'pull_request' ||
@@ -74,15 +74,15 @@ function run() {
                     const actor = payload.pull_request.user.login;
                     core.debug(JSON.stringify(actor));
                     const members = yield utils_1.getTeamMembers(api, config.teams.internal);
-                    core.debug(`members: '${JSON.stringify(members)}`);
+                    core.debug(`members: '${JSON.stringify(members)}'`);
                     core.debug(`actor: ${actor}`);
                     const isExternal = !members.includes(actor);
                     if (config.labels.externalPRs && isExternal) {
-                        core.debug(`adding '${JSON.stringify(config.labels.externalPRs)} to PR ${prNumber}`);
+                        core.debug(`adding '${JSON.stringify(config.labels.externalPRs)}' to PR ${prNumber}`);
                         yield utils_1.addLabels(api, prNumber, config.labels.externalPRs);
                     }
                     if (config.sync && !isExternal) {
-                        core.debug(`removing '${JSON.stringify(config.labels.externalPRs)} from PR ${prNumber}`);
+                        core.debug(`removing '${JSON.stringify(config.labels.externalPRs)}' from PR ${prNumber}`);
                         try {
                             yield utils_1.removeLabels(api, prNumber, config.labels.externalPRs);
                         }
@@ -195,7 +195,7 @@ function addLabels(client, prNumber, labels) {
 exports.addLabels = addLabels;
 function removeLabels(client, prNumber, labels) {
     return __awaiter(this, void 0, void 0, function* () {
-        core.debug(`removing '${JSON.stringify(labels)} from PR ${prNumber}`);
+        core.debug(`removing '${JSON.stringify(labels)}' from PR ${prNumber}`);
         yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () {
             return client.rest.issues.removeLabel({
                 owner: github.context.repo.owner,
@@ -214,7 +214,8 @@ function getTeamMembers(client, teams) {
             core.debug(`team: ${team}`);
             const members = yield client.request('GET /orgs/{org}/teams/{team_slug}/members', {
                 org: github.context.repo.owner,
-                team_slug: team
+                team_slug: team,
+                per_page: 100
             });
             for (const user of members.data) {
                 if (user) {
