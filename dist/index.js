@@ -68,7 +68,9 @@ function run() {
                 core.debug(`handling pull_request event`);
                 const payload = github.context.payload;
                 // core.debug(JSON.stringify(payload))
-                if (payload.action === 'opened' || payload.action === 'synchronize' || payload.action === 'reopened') {
+                if (payload.action === 'opened' ||
+                    payload.action === 'synchronize' ||
+                    payload.action === 'reopened') {
                     const prNumber = payload.pull_request.number;
                     core.debug(`PR number: ${prNumber}`);
                     const actor = payload.pull_request.user.login;
