@@ -11,5 +11,5 @@ inputs:
     default: '.github/labelmaker.yml'
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
